@@ -1,11 +1,13 @@
 import { Router } from "express";
 import {
   accessTokenValidator,
+  emailVerifyTokenValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
 } from "../middlewares/users.middlewares";
 import {
+  emailVerifyController,
   loginController,
   logoutController,
   registerController,
@@ -26,6 +28,12 @@ usersRouter.post(
   accessTokenValidator,
   refreshTokenValidator,
   wrapRequestHandler(logoutController)
+);
+
+usersRouter.post(
+  "/verify-email",
+  emailVerifyTokenValidator,
+  wrapRequestHandler(emailVerifyController)
 );
 
 export default usersRouter;
