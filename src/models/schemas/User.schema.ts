@@ -1,18 +1,14 @@
 import { ObjectId } from "mongodb";
+import { MediaType, UserVerifyStatus } from "~/constants/enums";
 
-enum UserVerifyStatus {
-  Unverified, // chưa xác thực email, mặc định = 0
-  Verified, // đã xác thực email
-  Banned, // bị khóa
-}
 interface Media {
   url: string;
   type: MediaType; // video, image
 }
-enum MediaType {
-  Image,
-  Video,
-}
+// enum MediaType {
+//   Image,
+//   Video,
+// }
 enum TweetAudience {
   Everyone, // 0
   TwitterCircle, // 1
@@ -74,6 +70,7 @@ export default class User {
     this.email_verify_token = user.email_verify_token || "";
     this.forgot_password_token = user.forgot_password_token || "";
     this.verify = user.verify || UserVerifyStatus.Unverified;
+
     this.bio = user.bio || "";
     this.location = user.location || "";
     this.website = user.website || "";

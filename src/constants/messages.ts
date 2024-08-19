@@ -47,10 +47,11 @@ export const USERS_MESSAGES = {
   WEBSITE_MUST_BE_STRING: "Website must be a string",
   WEBSITE_LENGTH: "Website length must be from 1 to 200",
   USERNAME_MUST_BE_STRING: "Username must be a string",
+  USERNAME_LENGTH: "Username length must be from 1 to 50",
   USERNAME_INVALID:
     "Username must be 4-15 characters long and contain only letters, numbers, underscores, not only numbers",
   IMAGE_URL_MUST_BE_STRING: "Avatar must be a string",
-  IMAGE_URL_LENGTH: "Avatar length must be from 1 to 200",
+  IMAGE_URL_LENGTH: "Avatar length must be from 1 to 400",
   UPDATE_ME_SUCCESS: "Update my profile success",
   GET_PROFILE_SUCCESS: "Get profile success",
   FOLLOW_SUCCESS: "Follow success",
@@ -65,6 +66,7 @@ export const USERS_MESSAGES = {
   UPLOAD_SUCCESS: "Upload success",
   REFRESH_TOKEN_SUCCESS: "Refresh token success",
   GET_VIDEO_STATUS_SUCCESS: "Get video status success",
+  INVALID_FOLLOWED_USER_ID: "INVALID_FOLLOWED_USER_ID",
 } as const;
 
 export const TWEETS_MESSAGES = {
