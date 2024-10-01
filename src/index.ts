@@ -6,12 +6,16 @@ import mediasRouter from "./routers/medias.routes";
 import { initFolder } from "./utils/files";
 import { config } from "dotenv";
 import argv from "minimist";
-import { UPLOAD_IMAGE_DIR } from "./constants/dir";
+import { UPLOAD_VIDEO_DIR } from "./constants/dir";
 import staticRouter from "./routers/static.routes";
+import cors from "cors";
 const options = argv(process.argv.slice(2));
 config();
-databaseService.connect();
+databaseService.connect().then(() => {
+  databaseService.indexUser();
+});
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 3000;
 
 console.log(options);
@@ -26,7 +30,7 @@ app.get("/", (req, res) => {
 app.use("/users", usersRouter);
 app.use("/medias", mediasRouter);
 app.use("/static", staticRouter);
-// app.use("/static", express.static(UPLOAD_IMAGE_DIR));
+app.use("/static/video", express.static(UPLOAD_VIDEO_DIR));
 
 app.use(defaultErrorHandler);
 
