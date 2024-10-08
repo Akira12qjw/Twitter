@@ -13,6 +13,7 @@ import {
   GetProfileReqParams,
   LoginReqBody,
   LogoutReqBody,
+  RefreshTokenReqBody,
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
@@ -69,6 +70,25 @@ export const logoutController = async (
   const result = await usersService.logout(refresh_token);
   return res.json(result);
 };
+
+export const refreshTokenController = async (
+  req: Request<ParamsDictionary, any, RefreshTokenReqBody>,
+  res: Response
+) => {
+  const { refresh_token } = req.body;
+  const { user_id, verify, exp } = req.decoded_refresh_token as TokenPayload;
+  const result = await usersService.refreshToken({
+    user_id,
+    refresh_token,
+    verify,
+    exp,
+  });
+  return res.json({
+    message: USERS_MESSAGES.REFRESH_TOKEN_SUCCESS,
+    result,
+  });
+};
+
 export const emailVerifyController = async (
   req: Request<ParamsDictionary, any, VerifyEmailReqBody>,
   res: Response,
@@ -102,8 +122,7 @@ export const emailVerifyController = async (
 
 export const resendVerifyEmailController = async (
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ) => {
   const { user_id } = req.decoded_authorization as TokenPayload;
   const user = await databaseService.users.findOne({
@@ -131,11 +150,11 @@ export const forgotPasswordController = async (
   next: NextFunction
 ) => {
   const { _id, verify } = req.user as User;
-  const result = await usersService.forgotPassword({
-    user_id: (_id as ObjectId).toString(),
-    verify,
-  });
-  return res.json(result);
+  // const result = await usersService.forgotPassword({
+  //   user_id: (_id as ObjectId).toString(),
+  //   verify,
+  // });
+  // return res.json(result);
 };
 
 export const verifyForgotPasswordController = async (

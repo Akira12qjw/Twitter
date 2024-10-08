@@ -4,6 +4,7 @@ import User from "~/models/schemas/User.schema";
 import RefreshToken from "~/models/schemas/RefreshToken.schema";
 import Follower from "~/models/schemas/Follower.schema";
 import VideoStatus from "~/models/schemas/VideoStatus.schema";
+import Tweet from "~/models/schemas/Tweet.chema";
 config();
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@twitter.jeyiaxq.mongodb.net/?retryWrites=true&w=majority&appName=Twitter`;
@@ -28,10 +29,42 @@ class DatabaseService {
     }
   }
 
-  indexUser() {
-    this.users.createIndex({ email: 1, password: 1 });
-    this.users.createIndex({ email: 1 }, { unique: true });
-    this.users.createIndex({ username: 1 }, { unique: true });
+  async indexUser() {
+    const exists = await this.users.indexExists([
+      "email_1_password_1",
+      "email_1",
+      "username_1",
+    ]);
+    if (!exists) {
+      this.users.createIndex({ email: 1, password: 1 });
+      this.users.createIndex({ email: 1 }, { unique: true });
+      this.users.createIndex({ username: 1 }, { unique: true });
+    }
+  }
+  async indexRefreshToken() {
+    const exists = await this.refresh_token.indexExists(["exp_1", "token_1"]);
+    if (!exists) {
+      this.refresh_token.createIndex({ token: 1 });
+      this.refresh_token.createIndex({ exp: 1 }, { expireAfterSeconds: 0 });
+    }
+  }
+  async indexVideoStatus() {
+    const exists = await this.videoStatus.indexExists(["name_1"]);
+    if (!exists) {
+      this.videoStatus.createIndex({ token: 1 });
+    }
+  }
+  async indexFollowers() {
+    const exists = await this.followers.indexExists([
+      "user_id_1_follower_user_id_1",
+    ]);
+    if (!exists) {
+      this.followers.createIndex({ user_id: 1, follower_user_id: 1 });
+    }
+  }
+
+  get tweets(): Collection<Tweet> {
+    return this.db.collection(process.env.DB_TWEETS_COLLECTION as string);
   }
 
   get users(): Collection<User> {

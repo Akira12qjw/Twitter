@@ -259,7 +259,7 @@ export const registerValidator = validate(
         trim: true,
         custom: {
           options: async (value) => {
-            const isExistEmail = await usersService.checkEmailExists(value);
+            const isExistEmail = await usersService.checkEmailExist(value);
             if (isExistEmail) {
               throw new Error(USERS_MESSAGES.EMAIL_ALREADY_EXISTS);
             }
